@@ -1,5 +1,6 @@
 package com.alura.literalura.principal;
 
+import com.alura.literalura.services.AuthorService;
 import com.alura.literalura.services.BookRequest;
 
 import java.nio.charset.StandardCharsets;
@@ -17,9 +18,9 @@ public class MainMenu {
     Scanner read = new Scanner(System.in, StandardCharsets.ISO_8859_1).useDelimiter("\n");
     BookRequest bookRequest = new BookRequest();
     BookService bs = new BookService();
+    AuthorService as = new AuthorService();
     public MainMenu() throws JsonProcessingException {
 
-        displayPrincipalMenu();
         switchMenu();
 
 
@@ -44,15 +45,17 @@ public class MainMenu {
     public void switchMenu() throws JsonProcessingException {
         int option;
         do {
+            displayPrincipalMenu();
             option = selectOption();
             switch (option){
                 case 1:
                     getBook();
-                    bs.showBooks();
                     break;
                 case 2:
+                    bs.showBooks();
                     break;
                 case 3:
+                    as.showAuthors();
                     break;
 
 
@@ -65,7 +68,7 @@ public class MainMenu {
         ObjectMapper objectMapper = new ObjectMapper();
         System.out.println("Enter Book Name");
         Optional<String> booksJson = Optional.ofNullable(bookRequest.getBooks(read.next().toLowerCase(Locale.ROOT)));
-        bs.createBooks(booksJson);
+        bs.createBooks(booksJson, as);
 
 
 
