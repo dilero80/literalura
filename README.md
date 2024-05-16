@@ -19,7 +19,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/dilero80/literalura">
-    <img src="img/badge literalura.png" alt="Logo" width="80" height="80">
+    <img src="/literalura/img/badge literalura.png" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">Dago's Literalura</h3>
