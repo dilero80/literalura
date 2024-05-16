@@ -8,26 +8,26 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
+
 @Service
 public class BookService {
-    private final BookRepository bookRepository;
 
-    public Set<Book> books;
     @Autowired
-    public BookService(BookRepository bookRepository) {
-        this.bookRepository = bookRepository;
-        this.books = new HashSet<>();
-    }
-
+    private final BookRepository bookRepository;
+    public Set<Book> books;
+    
     public BookService() {
-
+        
+        this.books = new HashSet<>();
+        bookRepository = null;
     }
 
+    @Transactional()
     public void createBooks (Optional<String> json, AuthorService as) throws JsonProcessingException {
         if (json.isPresent()){
             DataMapper mapper = new DataMapper();
@@ -40,6 +40,7 @@ public class BookService {
 
                 book = mapper.getData(bookNode.toString(), Book.class);
                 System.out.println(book);
+                bookRepository.save(book);
                 books.add(book);
                 HashSet<Author> authors = (HashSet<Author>) books.stream()
                         .flatMap(book1 -> book1.getAuthors().stream())
@@ -49,7 +50,7 @@ public class BookService {
                 }
         }
     }
-
+    
     public void showBooks() {
         System.out.println(books);
     }
@@ -58,12 +59,6 @@ public class BookService {
         return bookRepository.findAll();
     }
 
-    public Book saveBook(Book book) {
-        return bookRepository.save(book);
-    }
 
-    public void deleteBook(Long bookId) {
-        bookRepository.deleteById(bookId);
-    }
 
 }

@@ -1,5 +1,6 @@
 package com.alura.literalura.entities;
 
+import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
@@ -7,13 +8,17 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+@Entity
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Book {
+    @Id
     @JsonProperty
     private Integer id;
+    @Column(unique = true)
     @JsonProperty
     private String title;
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonProperty
     private Set<Author> authors;
     @JsonProperty
@@ -28,6 +33,8 @@ public class Book {
     //private ArrayList <String> formats;
     @JsonProperty
     private Integer download_count;
+
+
 
     public Book() {
         this.authors = new HashSet<>();
