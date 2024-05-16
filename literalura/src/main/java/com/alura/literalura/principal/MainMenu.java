@@ -1,6 +1,6 @@
 package com.alura.literalura.principal;
 
-import com.alura.literalura.repository.BookRepository;
+
 import com.alura.literalura.services.AuthorService;
 import com.alura.literalura.services.BookRequest;
 
@@ -12,18 +12,19 @@ import java.util.Scanner;
 import com.alura.literalura.services.BookService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+
+
 
 
 public class MainMenu {
     private Scanner read = new Scanner(System.in, StandardCharsets.ISO_8859_1).useDelimiter("\n");
     private BookRequest bookRequest = new BookRequest();
-    @Autowired
-    private BookRepository br;
-    private final BookService bs = new BookService();
-    AuthorService as = new AuthorService();
+    private final BookService bs;
+    private final AuthorService as;
 
-    public MainMenu() {
+    public MainMenu(BookService bookService, AuthorService authorService) {
+        this.bs = bookService;
+        this.as = authorService;
     }
 
     private int selectOption() {
@@ -52,16 +53,19 @@ public class MainMenu {
                     getBook();
                     break;
                 case 2:
-                    bs.showBooks();
+                    bs.getAllBooks();
                     break;
                 case 3:
-                    as.showAuthors();
+                    as.getAllAuthors();
+                    break;
+                case 4:
+                    bs.getBooksByLanguage();
                     break;
 
 
 
             }
-        }while(option != 4);
+        }while(option != 5);
     }
 
     private void getBook() throws JsonProcessingException {

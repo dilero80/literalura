@@ -6,27 +6,28 @@ import com.alura.literalura.repository.BookRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
+
 @Service
+@AllArgsConstructor
+@RequiredArgsConstructor
 public class BookService {
-
     @Autowired
-    private final BookRepository bookRepository;
-    public Set<Book> books;
-    
-    public BookService() {
-        
-        this.books = new HashSet<>();
-        bookRepository = null;
-    }
+    BookRepository bookRepository;
+    public Set<Book> books = new HashSet<>();
 
+    private Scanner read = new Scanner(System.in, StandardCharsets.ISO_8859_1).useDelimiter("\n");
     @Transactional()
     public void createBooks (Optional<String> json, AuthorService as) throws JsonProcessingException {
         if (json.isPresent()){
@@ -55,10 +56,25 @@ public class BookService {
         System.out.println(books);
     }
 
-    public List<Book> getAllBooks() {
-        return bookRepository.findAll();
+    @Transactional()
+    public void getAllBooks() {
+
+        List<Book> books1 = bookRepository.findAll();
+        books1.forEach(books::add);
+        showBooks();
     }
 
+    @Transactional
+    public void getBooksByLanguage() {
+        System.out.println("Enter language");
+        String language = read.next();
+        ArrayList<String> languages = new ArrayList<>();
+        languages.add(language);
+        System.out.println(languages);
+        //List<String> languages = Collections.singletonList(language);
+        List<Book> books1 = bookRepository.findByLanguagesLike(language);
+        books1.forEach(System.out::println);
 
 
+    }
 }

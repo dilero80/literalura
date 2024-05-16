@@ -4,8 +4,11 @@ import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import org.hibernate.annotations.CollectionType;
+
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -18,13 +21,14 @@ public class Book {
     @Column(unique = true)
     @JsonProperty
     private String title;
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonProperty
     private Set<Author> authors;
     @JsonProperty
-    private ArrayList <String> bookshelves;
+    private List <String> bookshelves;
     @JsonProperty
-    private ArrayList <String> languages;
+    @ElementCollection
+    private List<String> languages;
     @JsonProperty
     private Boolean copyright;
     //@JsonProperty
